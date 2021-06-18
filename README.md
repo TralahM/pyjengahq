@@ -1,6 +1,6 @@
 <img src="https://img.shields.io/github/license/TralahM/pyjengahq"> <img src="https://img.shields.io/github/last-commit/TralahM/pyjengahq"> <img src="https://img.shields.io/github/contributors/TralahM/pyjengahq"> <img src="https://img.shields.io/github/issues-pr-raw/TralahM/pyjengahq?color=blue"> <img src="https://img.shields.io/github/issues-pr-closed-raw/TralahM/pyjengahq?color=red"> <img src="https://img.shields.io/github/issues-raw/TralahM/pyjengahq?color=green">
 <img src="https://img.shields.io/github/issues-closed-raw/TralahM/pyjengahq?color=yellow"> <img src="https://img.shields.io/github/forks/TralahM/pyjengahq?label=Forks&style=social"> <img src="https://img.shields.io/github/forks/TralahM/pyjengahq?label=Forks&style=social"> <img src="https://img.shields.io/github/stars/TralahM/pyjengahq?style=social">
-<img src="https://img.shields.io/github/watchers/TralahM/pyjengahq?label=Watch&style=social"> <img src="https://img.shields.io/github/downloads/TralahM/pyjengahq/total"> <img src="https://img.shields.io/github/repo-size/TralahM/pyjengahq"> <img src="https://img.shields.io/github/languages/count/TralahM/pyjengahq"> <img src="https://img.shields.io/github/v/tag/TralahM/pyjengahq"> <img src="https://img.shields.io/readthedocs/tekrepodoc"> <img src="https://img.shields.io/pypi/v/tekrepodoc"> <img src="https://img.shields.io/pypi/pyversions/tekrepodoc"> <img src="https://img.shields.io/pypi/wheel/tekrepodoc"> <img src="https://img.shields.io/pypi/status/tekrepodoc?label=pypi%20status"> <img src="https://img.shields.io/pypi/format/tekrepodoc?label=pypi%20format">
+<img src="https://img.shields.io/github/watchers/TralahM/pyjengahq?label=Watch&style=social"> <img src="https://img.shields.io/github/downloads/TralahM/pyjengahq/total"> <img src="https://img.shields.io/github/repo-size/TralahM/pyjengahq"> <img src="https://img.shields.io/github/languages/count/TralahM/pyjengahq"> <img src="https://img.shields.io/github/v/tag/TralahM/pyjengahq"> <img src="https://img.shields.io/readthedocs/pyjengahq"> <img src="https://img.shields.io/pypi/v/pyjengahq"> <img src="https://img.shields.io/pypi/pyversions/pyjengahq"> <img src="https://img.shields.io/pypi/wheel/pyjengahq"> <img src="https://img.shields.io/pypi/status/pyjengahq?label=pypi%20status"> <img src="https://img.shields.io/pypi/format/pyjengahq?label=pypi%20format">
 
 # pyjengahq
 > Unofficial Python wrapper around the JengaAPIs that are pre-integrated into the financial, identity, credit and payment systems across Africa.
@@ -18,7 +18,7 @@
 #### Installation
 
 ```
-pip install tekrepodoc
+pip install pyjengahq
 ```
 #### From Source
 ```
@@ -33,7 +33,7 @@ pip install -e .
 
 ## Documentation
 
-[![Documentation](https://img.shields.io/badge/Docs-tekrepodoc-blue.svg?style=for-the-badge)](https://tekrepodoc.readthedocs.io)
+[![Documentation](https://img.shields.io/badge/Docs-pyjengahq-blue.svg?style=for-the-badge)](https://pyjengahq.readthedocs.io)
 
 
 #### API Reference

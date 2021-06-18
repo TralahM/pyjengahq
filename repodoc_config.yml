@@ -3,7 +3,7 @@ author_name: Tralah M Brian
 author_username: TralahM
 language: python
 licence: GPLv3
-package_name: tekrepodoc
+package_name: pyjengahq
 program_description: Unofficial Python wrapper around the JengaAPIs that are pre-integrated into the financial, identity, credit and payment systems across Africa.
 program_name: jengahq
 readthedocs: true
