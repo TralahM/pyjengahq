@@ -1,22 +1,29 @@
+"""Authentication module."""
 import base64
 import os
+
 import requests
+from Crypto.Hash import SHA256
 from Crypto.PublicKey import RSA
 from Crypto.Signature import PKCS1_v1_5
-from Crypto.Hash import SHA256
-from .exceptions import handle_response, generate_reference
-from . import helpers
+
+from . import helpers, send_money
+from .exceptions import generate_reference, handle_response
 
 
 class JengaAPI:
-    """
-    Jenga API CORE  Class Representation
+    """Jenga API CORE  Class Representation.
 
-    Jenga Payment Gateway and Jenga API support the OAuth 2.0 Authentication Framework, requiring you to provide a username and password, as well as an API key that you generate on Jenga HQ part of HTTP Basic Authentication to generate a Bearer token.
+    Jenga Payment Gateway and Jenga API support the OAuth 2.0 Authentication
+    Framework, requiring you to provide a username and password, as well as an
+    API key that you generate on Jenga HQ part of HTTP Basic Authentication
+    to generate a Bearer token.
 
-    Once you have a token you can make subsequent requests to initiate payments, check completed transactions and more.
+    Once you have a token you can make subsequent requests to initiate
+    payments, check completed transactions and more.
 
-    Only load your API keys as environment variables and do not share your credentials to anyone over email or any other method of communication.
+    Only load your API keys as environment variables and do not share your
+    credentials to anyone over email or any other method of communication.
 
     **Params**
 
@@ -52,9 +59,7 @@ class JengaAPI:
         sandbox_url="https://sandbox.jengahq.io",
         live_url="https://api.jengahq.io",
     ):
-        """
-
-        """
+        """Create Jenga Api object."""
         self.api_key = api_key
         self._username = merchant_code
         self._password = password
@@ -68,7 +73,7 @@ class JengaAPI:
 
     @property
     def authorization_token(self) -> str:
-        """
+        """Return Authorization Token.
 
         Returns a str like to be used in header as Authorization value
 
@@ -97,7 +102,8 @@ class JengaAPI:
         return token
 
     def signature(self, request_hash_fields: tuple):
-        """
+        """Return Signature to be used in request header.
+
         Build a String of concatenated values of the request fields with
         following order: as specificied by the API endpoint
         The resulting text is then signed with Private Key and Base64 encoded.
@@ -116,7 +122,8 @@ class JengaAPI:
         return base64.b64encode(sign)
 
     def get_pesalink_linked_accounts(self, mobile_number):
-        """
+        """Return pesalink lined accounts.
+
         This webservice returns the recipients’ Linked Banks linked to the
         provided phone number on PesaLink
         """
@@ -135,7 +142,8 @@ class JengaAPI:
         return handle_response(response)
 
     def get_transaction_status(self, requestId, transferDate):
-        """
+        """Get transaction status.
+
         Use this API to check the status of a B2C transaction
         """
         headers = {
@@ -155,7 +163,8 @@ class JengaAPI:
         return handle_response(response)
 
     def get_all_eazzypay_merchants(self, numPages=1, per_page=10):
-        """
+        """Return all EazzyPay merchants.
+
         This webservice returns all EazzyPay merchants .
         """
         headers = {"Authorization": self.authorization_token}
@@ -168,7 +177,8 @@ class JengaAPI:
         return handle_response(response)
 
     def get_all_billers(self, numPages=1, per_page=10):
-        """
+        """Return all billers.
+
         This web service returns a paginated list of all billers
         """
         headers = {"Authorization": self.authorization_token}
@@ -181,7 +191,8 @@ class JengaAPI:
         return handle_response(response)
 
     def get_payment_status(self, transactionReference):
-        """
+        """Return payment status.
+
         The webservice enables an application track the status of a payment
         that is linked to the Receive Payments - Eazzypay Push web service
         especially in failure states.
@@ -199,7 +210,8 @@ class JengaAPI:
         return handle_response(response)
 
     def get_transaction_details(self, transactionReference):
-        """
+        """Return transaction details.
+
         This webservice enables an application or service to query a
         transactions details and status
         """
@@ -220,10 +232,10 @@ class JengaAPI:
         return handle_response(response)
 
     def purchase_airtime(self, customer: dict, airtime: dict) -> dict:
-        """
+        """Purchase airtime.
+
         This gives an application the ability to purchase airtime from any telco in
         East and Central Africa.
-
         Example Request
 
         :Customer::
@@ -265,9 +277,7 @@ class JengaAPI:
                 "referenceNumber": "4568899373748",
                 "status": "SUCCESS"
             }
-
         """
-
         airtime["reference"] = generate_reference()
         payload = {
             "customer": customer,
@@ -293,10 +303,11 @@ class JengaAPI:
             return handle_response(response)
 
     def kyc_search_verify(self, identity: dict):
-        """
+        """Know your customer search and verify.
+
         Params:
 
-        :identitiy:
+        :identity:
             :documentType: string the document type of the customer.  for example ID, PASSPORT, ALIENID
 
             :firstName: string first name as per identity document type
@@ -371,7 +382,8 @@ class JengaAPI:
         return handle_response(response)
 
     def loans_credit_score(self, customer: list, bureau: dict, loan: dict) -> dict:
-        """
+        """Get Loans and credit score.
+
         Example Request Payload
         customer,bureau,loan
 
@@ -882,7 +894,8 @@ class JengaAPI:
         return handle_response(response)
 
     def get_forex_rates(self, countryCode: str, currencyCode: str) -> dict:
-        """
+        """Return Forex rates.
+
         Params
 
         :countryCode:: the country for which rates are being requested.
@@ -932,7 +945,8 @@ class JengaAPI:
         return handle_response(response)
 
     def get_account_available_balance(self, countryCode, accountId) -> dict:
-        """
+        """Get Account's available balance.
+
         Retrieve the current and available balance of an account
 
         200 Success Response Schema
@@ -968,7 +982,8 @@ class JengaAPI:
         return handle_response(response)
 
     def get_account_opening_and_closing_balance(self, accountId, countryCode, date):
-        """
+        """Get account opening and closing balance.
+
         Example Request
 
         .. code-block:: json
@@ -1017,7 +1032,8 @@ class JengaAPI:
         return handle_response(response)
 
     def get_account_mini_statement(self, countryCode, accountNumber):
-        """
+        """Get account mini statement.
+
         Example Response
 
         .. code-block:: json
@@ -1077,9 +1093,14 @@ class JengaAPI:
         return handle_response(response)
 
     def get_account_full_statement(
-        self, countryCode, accountNumber, fromDate, toDate, limit=10
+        self,
+        countryCode,
+        accountNumber,
+        fromDate,
+        toDate,
+        limit=10,
     ):
-        """
+        """Get account full statement.
 
         Example Response
 
@@ -1158,9 +1179,134 @@ class JengaAPI:
         response = requests.post(url, headers=headers, data=payload)
         return handle_response(response)
 
+    def send_money_to_equity(
+        self,
+        source: send_money.Source,
+        destination: send_money.Dest,
+        transfer: send_money.Dest,
+    ):
+        """Send money to bank account within equity bank."""
+        ift = send_money.IFT(source, destination, transfer)
+        headers = {
+            "Authorization": self.authorization_token,
+            "Content-Type": "application/json",
+            "signature": self.signature(ift.sigkeys),
+        }
+        if self.env == "sandbox":
+            resource = "/transaction-test/v2/remittance#sendeqtybank"
+            url = self.sandbox_url + resource
+        else:
+            resource = "/transaction/v2/remittance#sendeqtybank"
+            url = self.live_url + resource
+        response = requests.post(url, headers=headers, data=ift.body_payload)
+        return handle_response(response)
+
+    def send_money_to_mobile_wallet(self, source: send_money.Source, destination: send_money.MobileDest, transfer: send_money.MobileTransfer,):
+        """Send money to mobile wallets from equity bank."""
+        ift = send_money.IFT(source, destination, transfer)
+        headers = {
+            "Authorization": self.authorization_token,
+            "Content-Type": "application/json",
+            "signature": self.signature(ift.sigkeys),
+        }
+        if self.env == "sandbox":
+            resource = "/transaction-test/v2/remittance#sendmobile"
+            url = self.sandbox_url + resource
+        else:
+            resource = "/transaction/v2/remittance#sendmobile"
+            url = self.live_url + resource
+        response = requests.post(url, headers=headers, data=ift.body_payload)
+        return handle_response(response)
+
+    def send_money_to_rtgs(self, source: send_money.Source, destination: send_money.RTGSDest, transfer: send_money.Transfer,):
+        """Send money to RTGS from equity bank."""
+        ift = send_money.RTGS(source, destination, transfer)
+        headers = {
+            "Authorization": self.authorization_token,
+            "Content-Type": "application/json",
+            "signature": self.signature(ift.sigkeys),
+        }
+        if self.env == "sandbox":
+            resource = "/transaction-test/v2/remittance#rtgs"
+            url = self.sandbox_url + resource
+        else:
+            resource = "/transaction/v2/remittance#rtgs"
+            url = self.live_url + resource
+        response = requests.post(url, headers=headers, data=ift.body_payload)
+        return handle_response(response)
+
+    def send_money_to_swift(self, source: send_money.Source, destination: send_money.SWIFTDest, transfer: send_money.SWIFTTransfer,):
+        """Send money to SWIFT from equity bank."""
+        ift = send_money.SWIFT(source, destination, transfer)
+        headers = {
+            "Authorization": self.authorization_token,
+            "Content-Type": "application/json",
+            "signature": self.signature(ift.sigkeys),
+        }
+        if self.env == "sandbox":
+            resource = "/transaction-test/v2/remittance#swift"
+            url = self.sandbox_url + resource
+        else:
+            resource = "/transaction/v2/remittance#swift"
+            url = self.live_url + resource
+        response = requests.post(url, headers=headers, data=ift.body_payload)
+        return handle_response(response)
+
+    def send_money_to_eft(self, source: send_money.Source, destination: send_money.EFTDest, transfer: send_money.EFTTransfer,):
+        """Send money to EFT from equity bank."""
+        ift = send_money.EFT(source, destination, transfer)
+        headers = {
+            "Authorization": self.authorization_token,
+            "Content-Type": "application/json",
+            "signature": self.signature(ift.sigkeys),
+        }
+        if self.env == "sandbox":
+            resource = "/transaction-test/v2/remittance#eft"
+            url = self.sandbox_url + resource
+        else:
+            resource = "/transaction/v2/remittance#eft"
+            url = self.live_url + resource
+        response = requests.post(url, headers=headers, data=ift.body_payload)
+        return handle_response(response)
+
+    def send_money_to_pesalink_bank(self, source: send_money.Source, destination: send_money.PesalinkDest, transfer: send_money.PesalinkTransfer,):
+        """Send money to Pesalink bank from equity bank."""
+        ift = send_money.Pesalink(source, destination, transfer)
+        headers = {
+            "Authorization": self.authorization_token,
+            "Content-Type": "application/json",
+            "signature": self.signature(ift.sigkeys),
+        }
+        if self.env == "sandbox":
+            resource = "/transaction-test/v2/remittance#pesalinkacc"
+            url = self.sandbox_url + resource
+        else:
+            resource = "/transaction/v2/remittance#pesalinkacc"
+            url = self.live_url + resource
+        response = requests.post(url, headers=headers, data=ift.body_payload)
+        return handle_response(response)
+
+    def send_money_to_pesalink_mobile(self, source: send_money.Source, destination: send_money.PesalinkMobileDest, transfer: send_money.PesalinkTransfer,):
+        """Send money to Pesalink bank from equity bank."""
+        ift = send_money.Pesalink(source, destination, transfer)
+        headers = {
+            "Authorization": self.authorization_token,
+            "Content-Type": "application/json",
+            "signature": self.signature(ift.sigkeys),
+        }
+        if self.env == "sandbox":
+            resource = "/transaction-test/v2/remittance#pesalinkmobile"
+            url = self.sandbox_url + resource
+        else:
+            resource = "/transaction/v2/remittance#pesalinkmobile"
+            url = self.live_url + resource
+        response = requests.post(url, headers=headers, data=ift.body_payload)
+        return handle_response(response)
+
 
 def generate_key_pair():
-    """
+    """Generate a public/private key pair.
+
     Generates a Public/Public RSA Key Pair which is store in the current User's
     **HOME** directory  under the **.JengaAPI/keys/** Directory
     """

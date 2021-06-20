@@ -14,7 +14,7 @@ DestinationTypes = {
 
 
 class Source:
-    """Internal Funds Transfer Source."""
+    """Funds Transfer Source."""
 
     def __init__(self, account_number, name, country_code="KE"):
         """Create Source object."""
@@ -46,7 +46,7 @@ class Dest:
     def to_json(self):
         """Convert to json."""
         return {
-            "source": {
+            "destination": {
                 "countryCode": self.countryCode,
                 "name": self.name,
                 "accountNumber": self.accountNumber,
@@ -78,7 +78,7 @@ class Transfer:
     def to_json(self):
         """Convert to json."""
         return {
-            "source": {
+            "transfer": {
                 "currencyCode": self.currencyCode,
                 "reference": self.reference,
                 "date": self.date,
@@ -103,7 +103,7 @@ class PesalinkMobileDest(Dest):
     def to_json(self):
         """Convert to json."""
         return {
-            "source": {
+            "destination": {
                 "countryCode": self.countryCode,
                 "name": self.name,
                 "mobileNumber": self.mobileNumber,
@@ -133,7 +133,7 @@ class MobileDest(Dest):
     def to_json(self):
         """Convert to json."""
         return {
-            "source": {
+            "destination": {
                 "countryCode": self.countryCode,
                 "name": self.name,
                 "mobileNumber": self.mobileNumber,
@@ -144,7 +144,7 @@ class MobileDest(Dest):
 
 
 class PesalinkTransfer(Transfer):
-    """Mobile Transfer."""
+    """PesaLink Mobile Transfer."""
 
     def __init__(
         self,
@@ -153,15 +153,16 @@ class PesalinkTransfer(Transfer):
         currencyCode,
         date,
         description,
-        type="PesaLink",
     ):
         """Create  Transfer object."""
-        self.currencyCode = currencyCode
-        self.amount = amount
-        self.reference = reference
-        self.date = date
-        self.description = description
-        self.type = type
+        super().__init__(
+            amount,
+            reference,
+            currencyCode,
+            date,
+            description,
+            type="PesaLink",
+        )
 
 
 class MobileTransfer(Transfer):
@@ -174,15 +175,16 @@ class MobileTransfer(Transfer):
         currencyCode,
         date,
         description,
-        type="MobileWallet",
     ):
         """Create  Transfer object."""
-        self.currencyCode = currencyCode
-        self.amount = amount
-        self.reference = reference
-        self.date = date
-        self.description = description
-        self.type = type
+        super().__init__(
+            amount,
+            reference,
+            currencyCode,
+            date,
+            description,
+            type="MobileWallet",
+        )
 
 
 class EFTTransfer(Transfer):
@@ -195,18 +197,19 @@ class EFTTransfer(Transfer):
         currencyCode,
         date,
         description,
-        type="EFT",
     ):
         """Create  Transfer object."""
-        self.currencyCode = currencyCode
-        self.amount = amount
-        self.reference = reference
-        self.date = date
-        self.description = description
-        self.type = type
+        super().__init__(
+            amount,
+            reference,
+            currencyCode,
+            date,
+            description,
+            type="EFT",
+        )
 
 
-class SWIFTransfer(Transfer):
+class SWIFTTransfer(Transfer):
     """SWIFT Transfer."""
 
     def __init__(
@@ -233,7 +236,7 @@ class SWIFTransfer(Transfer):
     def to_json(self):
         """Convert to json."""
         return {
-            "source": {
+            "transfer": {
                 "currencyCode": self.currencyCode,
                 "reference": self.reference,
                 "date": self.date,
@@ -259,7 +262,7 @@ class RTGSDest(Dest):
     def to_json(self):
         """Convert to json."""
         return {
-            "source": {
+            "destination": {
                 "countryCode": self.countryCode,
                 "name": self.name,
                 "accountNumber": self.accountNumber,
@@ -291,7 +294,7 @@ class EFTDest(Dest):
     def to_json(self):
         """Convert to json."""
         return {
-            "source": {
+            "destination": {
                 "countryCode": self.countryCode,
                 "name": self.name,
                 "accountNumber": self.accountNumber,
@@ -324,7 +327,7 @@ class PesalinkDest(Dest):
     def to_json(self):
         """Convert to json."""
         return {
-            "source": {
+            "destination": {
                 "countryCode": self.countryCode,
                 "name": self.name,
                 "accountNumber": self.accountNumber,
@@ -357,7 +360,7 @@ class SWIFTDest(Dest):
     def to_json(self):
         """Convert to json."""
         return {
-            "source": {
+            "destination": {
                 "countryCode": self.countryCode,
                 "name": self.name,
                 "accountNumber": self.accountNumber,

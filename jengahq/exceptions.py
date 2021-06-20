@@ -1,6 +1,4 @@
-"""
-Downstream Provider Error responses:
-
+"""Downstream Provider Error responses.
 
 ======   ======   ===============================================================
 error    900101    Invalid merchant Cipher Text
@@ -340,7 +338,8 @@ import requests
 
 
 def handle_response(response):
-    """
+    """Handle response.
+
     Handles Responses From the JengaHQ API and Raises Exceptions appropriately
     as errors occur and returns a `dict` object from the `json` response
     """
@@ -356,12 +355,14 @@ def handle_response(response):
 
 
 def generate_reference() -> str:
-    """
+    """Generate reference unique 12 digit string.
+
     Generate a transaction reference
     Should always be a 12 digit String
     """
     import datetime
 
     a = datetime.datetime.now()
-    ref = "".join(str(a).replace(" ", "").replace("-", "").split(":")[0:2])
+    ref = datetime.datetime.strftime(a, '%Y%m%d%s')
+    # ref = "".join(str(a).replace(" ", "").replace("-", "").split(":")[0:2])
     return ref
