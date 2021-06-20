@@ -878,7 +878,8 @@ class JengaAPI:
         dateOfBirth = payload.get("customer")[0].get("dateOfBirth")
         merchantCode = self.merchant_code
         documentNumber = (
-            payload.get("customer")[0].get("identityDocument").get("documentNumber")
+            payload.get("customer")[0].get(
+                "identityDocument").get("documentNumber")
         )
         headers = {
             "Authorization": self.authentication_token,
@@ -1336,10 +1337,10 @@ class JengaAPI:
         self,
         customer: receive_money.Customer,
         transaction: receive_money.Transaction,
-        merchantCode: str,
     ):
         """Receive Money from customer via Eazzy pay push."""
-        rmo = receive_money.EazzyPayPush(customer, transaction, merchantCode)
+        rmo = receive_money.EazzyPayPush(
+            customer, transaction, self.merchantCode)
         headers = {
             "Authorization": self.authorization_token,
             "Content-Type": "application/json",
