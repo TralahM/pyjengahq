@@ -7,7 +7,7 @@ from Crypto.Hash import SHA256
 from Crypto.PublicKey import RSA
 from Crypto.Signature import PKCS1_v1_5
 
-from . import helpers, send_money
+from . import helpers, send_money, receive_money
 from .exceptions import generate_reference, handle_response
 
 
@@ -878,8 +878,7 @@ class JengaAPI:
         dateOfBirth = payload.get("customer")[0].get("dateOfBirth")
         merchantCode = self.merchant_code
         documentNumber = (
-            payload.get("customer")[0].get(
-                "identityDocument").get("documentNumber")
+            payload.get("customer")[0].get("identityDocument").get("documentNumber")
         )
         headers = {
             "Authorization": self.authentication_token,
@@ -1201,7 +1200,12 @@ class JengaAPI:
         response = requests.post(url, headers=headers, data=ift.body_payload)
         return handle_response(response)
 
-    def send_money_to_mobile_wallet(self, source: send_money.Source, destination: send_money.MobileDest, transfer: send_money.MobileTransfer,):
+    def send_money_to_mobile_wallet(
+        self,
+        source: send_money.Source,
+        destination: send_money.MobileDest,
+        transfer: send_money.MobileTransfer,
+    ):
         """Send money to mobile wallets from equity bank."""
         ift = send_money.IFT(source, destination, transfer)
         headers = {
@@ -1218,7 +1222,12 @@ class JengaAPI:
         response = requests.post(url, headers=headers, data=ift.body_payload)
         return handle_response(response)
 
-    def send_money_to_rtgs(self, source: send_money.Source, destination: send_money.RTGSDest, transfer: send_money.Transfer,):
+    def send_money_to_rtgs(
+        self,
+        source: send_money.Source,
+        destination: send_money.RTGSDest,
+        transfer: send_money.Transfer,
+    ):
         """Send money to RTGS from equity bank."""
         ift = send_money.RTGS(source, destination, transfer)
         headers = {
@@ -1235,7 +1244,12 @@ class JengaAPI:
         response = requests.post(url, headers=headers, data=ift.body_payload)
         return handle_response(response)
 
-    def send_money_to_swift(self, source: send_money.Source, destination: send_money.SWIFTDest, transfer: send_money.SWIFTTransfer,):
+    def send_money_to_swift(
+        self,
+        source: send_money.Source,
+        destination: send_money.SWIFTDest,
+        transfer: send_money.SWIFTTransfer,
+    ):
         """Send money to SWIFT from equity bank."""
         ift = send_money.SWIFT(source, destination, transfer)
         headers = {
@@ -1252,7 +1266,12 @@ class JengaAPI:
         response = requests.post(url, headers=headers, data=ift.body_payload)
         return handle_response(response)
 
-    def send_money_to_eft(self, source: send_money.Source, destination: send_money.EFTDest, transfer: send_money.EFTTransfer,):
+    def send_money_to_eft(
+        self,
+        source: send_money.Source,
+        destination: send_money.EFTDest,
+        transfer: send_money.EFTTransfer,
+    ):
         """Send money to EFT from equity bank."""
         ift = send_money.EFT(source, destination, transfer)
         headers = {
@@ -1269,7 +1288,12 @@ class JengaAPI:
         response = requests.post(url, headers=headers, data=ift.body_payload)
         return handle_response(response)
 
-    def send_money_to_pesalink_bank(self, source: send_money.Source, destination: send_money.PesalinkDest, transfer: send_money.PesalinkTransfer,):
+    def send_money_to_pesalink_bank(
+        self,
+        source: send_money.Source,
+        destination: send_money.PesalinkDest,
+        transfer: send_money.PesalinkTransfer,
+    ):
         """Send money to Pesalink bank from equity bank."""
         ift = send_money.Pesalink(source, destination, transfer)
         headers = {
@@ -1286,7 +1310,12 @@ class JengaAPI:
         response = requests.post(url, headers=headers, data=ift.body_payload)
         return handle_response(response)
 
-    def send_money_to_pesalink_mobile(self, source: send_money.Source, destination: send_money.PesalinkMobileDest, transfer: send_money.PesalinkTransfer,):
+    def send_money_to_pesalink_mobile(
+        self,
+        source: send_money.Source,
+        destination: send_money.PesalinkMobileDest,
+        transfer: send_money.PesalinkTransfer,
+    ):
         """Send money to Pesalink bank from equity bank."""
         ift = send_money.Pesalink(source, destination, transfer)
         headers = {
@@ -1301,6 +1330,128 @@ class JengaAPI:
             resource = "/transaction/v2/remittance#pesalinkmobile"
             url = self.live_url + resource
         response = requests.post(url, headers=headers, data=ift.body_payload)
+        return handle_response(response)
+
+    def receive_money_eazzypay_push(
+        self,
+        customer: receive_money.Customer,
+        transaction: receive_money.Transaction,
+        merchantCode: str,
+    ):
+        """Receive Money from customer via Eazzy pay push."""
+        rmo = receive_money.EazzyPayPush(customer, transaction, merchantCode)
+        headers = {
+            "Authorization": self.authorization_token,
+            "Content-Type": "application/json",
+            "signature": self.signature(rmo.sigkeys),
+        }
+        if self.env == "sandbox":
+            resource = "/transaction-test/v2/payments"
+            url = self.sandbox_url + resource
+        else:
+            resource = "/transaction/v2/payments"
+            url = self.live_url + resource
+        response = requests.post(url, headers=headers, data=rmo.body_payload)
+        return handle_response(response)
+
+    def receive_money_bill_payment(
+        self,
+        biller: receive_money.Biller,
+        bill: receive_money.Bill,
+        payer: receive_money.Payer,
+        partnerId: str,
+        remarks: str,
+    ):
+        """Receive Money via bill Payments."""
+        rmo = receive_money.BillPayment(
+            biller,
+            bill,
+            payer,
+            partnerId,
+            remarks,
+        )
+        headers = {
+            "Authorization": self.authorization_token,
+            "Content-Type": "application/json",
+            "signature": self.signature(rmo.sigkeys),
+        }
+        if self.env == "sandbox":
+            resource = "/transaction-test/v2/bills/pay"
+            url = self.sandbox_url + resource
+        else:
+            resource = "/transaction/v2/bills/pay"
+            url = self.live_url + resource
+        response = requests.post(url, headers=headers, data=rmo.body_payload)
+        return handle_response(response)
+
+    def receive_money_merchant_payment(
+        self,
+        merchant: receive_money.Merchant,
+        payment: receive_money.Payment,
+        partner: receive_money.Partner,
+    ):
+        """Receive money via merchant payments."""
+        rmo = receive_money.MerchantPayment(merchant, payment, partner)
+        headers = {
+            "Authorization": self.authorization_token,
+            "Content-Type": "application/json",
+            "signature": self.signature(rmo.sigkeys),
+        }
+        if self.env == "sandbox":
+            resource = "/transaction-test/v2/tills/pay"
+            url = self.sandbox_url + resource
+        else:
+            resource = "/transaction/v2/tills/pay"
+            url = self.live_url + resource
+        response = requests.post(url, headers=headers, data=rmo.body_payload)
+        return handle_response(response)
+
+    def receive_money_refund_payment(
+        self,
+        customer: receive_money.Customer,
+        transaction: receive_money.RefundReverseTransaction,
+    ):
+        """Refund Payment from customer."""
+        rmo = receive_money.RefundReversePayment(customer, transaction)
+        headers = {
+            "Authorization": self.authorization_token,
+            "Content-Type": "application/json",
+            "signature": self.signature(rmo.sigkeys),
+        }
+        if self.env == "sandbox":
+            resource = "/transaction-test/v2/payments/refund"
+            url = self.sandbox_url + resource
+        else:
+            resource = "/transaction/v2/payments/refund"
+            url = self.live_url + resource
+        response = requests.post(url, headers=headers, data=rmo.body_payload)
+        return handle_response(response)
+
+    def receive_money_bill_validation(
+        self,
+        billerCode,
+        customerRefNumber,
+        amount,
+        amountCurrency,
+    ):
+        """Perform bill validation."""
+        rmo = receive_money.BillValidation(
+            billerCode,
+            customerRefNumber,
+            amount,
+            amountCurrency,
+        )
+        headers = {
+            "Authorization": self.authorization_token,
+            "Content-Type": "application/json",
+        }
+        if self.env == "sandbox":
+            resource = "/transaction-test/v2/bills/validation"
+            url = self.sandbox_url + resource
+        else:
+            resource = "/transaction/v2/bills/validation"
+            url = self.live_url + resource
+        response = requests.post(url, headers=headers, data=rmo.body_payload)
         return handle_response(response)
 
 
