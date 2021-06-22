@@ -1,8 +1,8 @@
-JengaHQ Package
+JengaHQ API Reference
 =========================
 
 
-jengahq.auth
+jengaAPI
 --------------------------------------
 .. automodule:: jengahq.auth
    :members:
@@ -14,14 +14,6 @@ jengahq.auth
 jengahq.helpers
 --------------------------------------------
 .. automodule:: jengahq.helpers
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-
-jengahq.exceptions
---------------------------------------------
-.. automodule:: jengahq.exceptions
    :members:
    :undoc-members:
    :show-inheritance:
@@ -43,5 +35,13 @@ jengahq.receive\_money
    :undoc-members:
    :show-inheritance:
 
+
+
+Errors and Exceptions
+--------------------------------------------
+.. automodule:: jengahq.exceptions
+   :members:
+   :undoc-members:
+   :show-inheritance:
 
 

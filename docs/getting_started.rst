@@ -3,10 +3,11 @@ Getting Started
 
 Installation
 -------------
+The package is available on pypi.org <https://pypi.org/projects/pyjengahq>.
 
 .. code-block:: shell
 
-   pip install equity-jenga-api
+   pip install pyjengahq
 
 First Things First
 --------------------
@@ -33,7 +34,27 @@ After Installation, Generate Your Keys using the following command:
 Using The APIs
 -------------------------------
 
-Creating JengaRequest objects
+Creating JengaAPI objects
 +++++++++++++++++++++++++++++++
-By Design all API classes provided inherit from the `jengahq.auth.JengaAPI` class which takes the following parameters:
+By Design, interaction with all Jenga APIs functionality uses the `jengahq.auth.JengaAPI` class which takes the following parameters:
+
+* api_key: Your Jenga API Key
+* password: Your Jenga API Password
+* merchant_code:: the merchant code provided by JengaHQ
+* env:: the environment in which  the API is to be used either *sandbox* or *production*
+* private_key:: the path to the merchant private key default is "~/.JengaAPI/keys/privatekey.pem"
+* sandbox_url:: the url used to access the Sandbox API
+* live_url:: the url used to access the Production API
+
+**Example**
+
+.. code-block:: python
+
+    import jengahq
+    jengaApi = jengahq.JengaAPI(
+        api_key="Basic TofFGUeU9y448idLCKVAe35LmAtLU9y448idLCKVAe35LmAtL",
+        password="TofFGUeU9y448idLCKVAe35LmAtL",
+        merchant_code="4144142283",
+        env="sandbox",
+    )
 

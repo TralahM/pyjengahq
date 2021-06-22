@@ -1,3 +1,4 @@
+"""Configuration file for the Sphinx documentation builder."""
 # Configuration file for the Sphinx documentation builder.
 #
 # This file only contains a selection of the most common options. For a full
@@ -19,8 +20,8 @@ sys.path.insert(0, os.path.abspath("../jengahq/"))
 
 # -- Project information -----------------------------------------------------
 
-project = "equity-jenga-api"
-copyright = "2020, Tralah M Brian"
+project = "pyjengahq"
+copyright = "2021, Tralah M Brian"
 author = "Tralah M Brian"
 show_authors = True
 
