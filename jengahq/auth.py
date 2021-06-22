@@ -39,12 +39,12 @@ class JengaAPI:
 
     .. code-block:: python
 
-        from equity_jenga import api
-        jengaApi = api.auth.JengaAPI(
-        api_key="Basic TofFGUeU9y448idLCKVAe35LmAtLU9y448idLCKVAe35LmAtL",
-        password="TofFGUeU9y448idLCKVAe35LmAtL",
-        merchant_code="4144142283",
-        env="sandbox",
+        import jengahq
+        jengaApi = jengahq.JengaAPI(
+            api_key="Basic TofFGUeU9y448idLCKVAe35LmAtLU9y448idLCKVAe35LmAtL",
+            password="TofFGUeU9y448idLCKVAe35LmAtL",
+            merchant_code="4144142283",
+            env="sandbox",
         )
 
     """
@@ -54,10 +54,10 @@ class JengaAPI:
         api_key: str,
         password: str,
         merchant_code: str,
-        env="sandbox",
+        env: str = "sandbox",
         private_key=os.path.expanduser("~") + "/.JengaApi/keys/privatekey.pem",
-        sandbox_url="https://sandbox.jengahq.io",
-        live_url="https://api.jengahq.io",
+        sandbox_url: str = "https://sandbox.jengahq.io",
+        live_url: str = "https://api.jengahq.io",
     ):
         """Create Jenga Api object."""
         self.api_key = api_key
@@ -77,7 +77,7 @@ class JengaAPI:
 
         Returns a str like to be used in header as Authorization value
 
-        ..code-block:: python
+        .. code-block:: python
 
             "Bearer ceTo5RCpluTfGn9B3OZXnnQkDVKM"
 
@@ -121,7 +121,7 @@ class JengaAPI:
         sign = signer.sign(digest)
         return base64.b64encode(sign)
 
-    def get_pesalink_linked_accounts(self, mobile_number):
+    def get_pesalink_linked_accounts(self, mobile_number: str):
         """Return pesalink lined accounts.
 
         This webservice returns the recipients’ Linked Banks linked to the
@@ -141,7 +141,7 @@ class JengaAPI:
         response = requests.post(url, headers=headers, data=data)
         return handle_response(response)
 
-    def get_transaction_status(self, requestId, transferDate):
+    def get_transaction_status(self, requestId: str, transferDate: str):
         """Get transaction status.
 
         Use this API to check the status of a B2C transaction
@@ -162,7 +162,7 @@ class JengaAPI:
         response = requests.post(url, headers=headers, data=data)
         return handle_response(response)
 
-    def get_all_eazzypay_merchants(self, numPages=1, per_page=10):
+    def get_all_eazzypay_merchants(self, numPages: int = 1, per_page: int = 10):
         """Return all EazzyPay merchants.
 
         This webservice returns all EazzyPay merchants .
@@ -176,7 +176,7 @@ class JengaAPI:
         response = requests.get(url, headers=headers, params=params)
         return handle_response(response)
 
-    def get_all_billers(self, numPages=1, per_page=10):
+    def get_all_billers(self, numPages: int = 1, per_page: int = 10):
         """Return all billers.
 
         This web service returns a paginated list of all billers
@@ -190,7 +190,7 @@ class JengaAPI:
         response = requests.get(url, headers=headers, params=params)
         return handle_response(response)
 
-    def get_payment_status(self, transactionReference):
+    def get_payment_status(self, transactionReference: str):
         """Return payment status.
 
         The webservice enables an application track the status of a payment
@@ -209,7 +209,7 @@ class JengaAPI:
         response = requests.get(url, headers=headers)
         return handle_response(response)
 
-    def get_transaction_details(self, transactionReference):
+    def get_transaction_details(self, transactionReference: str):
         """Return transaction details.
 
         This webservice enables an application or service to query a
@@ -234,8 +234,8 @@ class JengaAPI:
     def purchase_airtime(self, customer: dict, airtime: dict) -> dict:
         """Purchase airtime.
 
-        This gives an application the ability to purchase airtime from any telco in
-        East and Central Africa.
+        This gives an application the ability to purchase airtime from any
+        telco in East and Central Africa.
         Example Request
 
         :Customer::
@@ -370,7 +370,9 @@ class JengaAPI:
         headers = {
             "Authorization": self.authorization_token,
             "Content-Type": "application/json",
-            "signature": self.signature((merchantCode, documentNumber, countryCode)),
+            "signature": self.signature(
+                (merchantCode, documentNumber, countryCode),
+            ),
         }
         data = {"identity": identity}
         if self.env == "sandbox":
@@ -944,7 +946,11 @@ class JengaAPI:
         response = requests.post(url=url, headers=headers, data=data)
         return handle_response(response)
 
-    def get_account_available_balance(self, countryCode, accountId) -> dict:
+    def get_account_available_balance(
+        self,
+        countryCode: str,
+        accountId: str,
+    ) -> dict:
         """Get Account's available balance.
 
         Retrieve the current and available balance of an account
@@ -981,7 +987,12 @@ class JengaAPI:
         response = requests.get(url, headers=headers)
         return handle_response(response)
 
-    def get_account_opening_and_closing_balance(self, accountId, countryCode, date):
+    def get_account_opening_and_closing_balance(
+        self,
+        accountId: str,
+        countryCode: str,
+        date: str,
+    ):
         """Get account opening and closing balance.
 
         Example Request
@@ -1031,7 +1042,7 @@ class JengaAPI:
         response = requests.post(url, headers=headers, data=data)
         return handle_response(response)
 
-    def get_account_mini_statement(self, countryCode, accountNumber):
+    def get_account_mini_statement(self, countryCode: str, accountNumber: str):
         """Get account mini statement.
 
         Example Response
@@ -1094,10 +1105,10 @@ class JengaAPI:
 
     def get_account_full_statement(
         self,
-        countryCode,
-        accountNumber,
-        fromDate,
-        toDate,
+        countryCode: str,
+        accountNumber: str,
+        fromDate: str,
+        toDate: str,
         limit=10,
     ):
         """Get account full statement.
